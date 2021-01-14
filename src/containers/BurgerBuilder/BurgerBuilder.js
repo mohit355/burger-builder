@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import Burger from "../../components/Burger/Burger";
 import BurgerControls from "../../components/Burger/BuildControls/BuildControls";
 import Aux from "../../hoc/Auxillary";
+import Modal from "../../components/UI/Modal/Modal";
+import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 
 const INGREDIENT_PRICES = {
-  salad: 15,
+  salad: 1.5,
   cheese: 10,
-  meat: 15,
+  meat: 1.5,
   bacon: 5,
 };
 
@@ -18,8 +20,23 @@ class BurgerBuilder extends Component {
       cheese: 0,
       meat: 0,
     },
+    purchasable: false,
     totlaPrice: 40,
   };
+
+  updatePurchaseState(ingredients) {
+    const sum = Object.keys(ingredients)
+      .map((igkey) => {
+        return ingredients[igkey];
+      })
+      .reduce((sum, el) => {
+        return sum + el;
+      }, 0);
+
+    this.setState({
+      purchasable: sum > 0,
+    });
+  }
 
   addIngredientsHandler = (type) => {
     const oldCount = this.state.ingredients[type];
@@ -36,6 +53,8 @@ class BurgerBuilder extends Component {
       totlaPrice: newPrice,
       ingredients: updatedIngredients,
     });
+
+    this.updatePurchaseState(updatedIngredients);
   };
 
   removeIngredientsHandler = (type) => {
@@ -58,6 +77,8 @@ class BurgerBuilder extends Component {
       totlaPrice: newPrice,
       ingredients: updatedIngredients,
     });
+
+    this.updatePurchaseState(updatedIngredients);
   };
 
   render() {
@@ -71,13 +92,16 @@ class BurgerBuilder extends Component {
 
     return (
       <Aux>
-        <div>
-          <Burger ingredients={this.state.ingredients} />
-        </div>
+        <Modal>
+          <OrderSummary ingredients={this.state.ingredients} />
+        </Modal>
+        <Burger ingredients={this.state.ingredients} />
         <BurgerControls
           ingredientAdded={this.addIngredientsHandler}
           ingredientRemoved={this.removeIngredientsHandler}
           disabled={disabledInfo}
+          price={this.state.totlaPrice}
+          purchasable={this.state.purchasable}
         />
       </Aux>
     );
