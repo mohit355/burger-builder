@@ -3,15 +3,8 @@ import ChecoutSummary from "../../components/Order/CheckoutSummary/CheckoutSumma
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import ContactData from "./ContactData/ContactData";
-import * as actions from "../../store/actions/index";
 
 class Checkout extends Component {
-  //
-
-  // componentWillMount() {
-  //   this.props.onInitPurchase();
-  // }
-
   checkoutCancelledHandler = () => {
     this.props.history.goBack();
   };

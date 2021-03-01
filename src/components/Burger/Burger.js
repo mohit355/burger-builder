@@ -2,7 +2,6 @@ import React from "react";
 import "./Burger.css";
 import BurgerIngredient from "./BurgerIngredient/BurgerIngredient";
 const burger = (props) => {
-  //
   // extracting the ingrdients name and number of repeation of that ingredients
 
   let transformedIngredients = Object.keys(props.ingredients)
